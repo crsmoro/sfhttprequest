@@ -4,10 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -157,8 +157,9 @@ public class SfHttpRequest implements Cloneable {
 	}
 
 	private void addDefaultHeaders(HttpUriRequest httpUriRequest) {
-		httpUriRequest.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0");
+		httpUriRequest.setHeader("User-Agent", "Firefox/60.0.1");
 		httpUriRequest.addHeader("Accept-Encoding", "gzip");
+		httpUriRequest.addHeader("Accept-Charset", "utf-8");
 	}
 
 	public SfHttpRequest addParameter(String key, String value) {
@@ -267,11 +268,7 @@ public class SfHttpRequest implements Cloneable {
 		
 		HttpEntity httpEntity = null;
 		if (multipartParameters.isEmpty()) {
-			try {
-				httpEntity = new UrlEncodedFormEntity(parameters);
-			} catch (UnsupportedEncodingException e) {
-				log.info("Encoding of parameters error", e);
-			}
+			httpEntity = new UrlEncodedFormEntity(parameters, StandardCharsets.UTF_8);
 		}
 		else {
 			MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
