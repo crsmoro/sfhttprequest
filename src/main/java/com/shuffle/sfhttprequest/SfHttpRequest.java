@@ -130,7 +130,11 @@ public class SfHttpRequest implements Cloneable {
 			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 			copyBytes(httpEntity.getContent(), byteArrayOutputStream);
 			httpEntityFile = byteArrayOutputStream.toByteArray();
-			if (contentType.getCharset() != null) {
+			if ((response.getFirstHeader("refresh") != null || response.getFirstHeader("Refresh") != null))
+			{
+				httpEntityString = "refresh bullshit";
+			}
+			else if (contentType.getCharset() != null) {
 				httpEntityString = new String(httpEntityFile, contentType.getCharset());
 			}
 			else {
